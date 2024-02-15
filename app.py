@@ -22,8 +22,7 @@ def forecast_api():
         value1 = data['value1']
         value2 = data['value2']
         hours = 8766 #number of hours in a year, this will further be refined to take the dates an input
-        #Preprocess input
-
+      
         #Make predictions
         forecast = v4model.forecast(steps=hours)
         output = forecast.iloc[value1:value2].to_dict()
