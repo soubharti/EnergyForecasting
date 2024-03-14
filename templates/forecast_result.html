@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecast Result</title>
+</head>
+<body>
+    <h1>Forecasted Energy Consumption</h1>
+    <p>Here is the forecasted energy consumption:</p>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Energy Consumption</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for timestamp, consumption in forecast.items() %}
+                <tr>
+                    <td>{{ timestamp }}</td>
+                    <td>{{ consumption }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <h2>Plot of Forecast</h2>
+    <img src="data:image/png;base64,{{ plot_base64 }}" alt="Forecast Plot">
+</body>
+</html>

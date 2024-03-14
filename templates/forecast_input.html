@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Energy Consumption Forecast Input</title>
+</head>
+<body>
+    <h1>Energy Consumption Forecast</h1>
+    
+    <form id="forecast-form">
+        <label for="start-timestamp">Start Timestamp:</label><br>
+        <input type="datetime-local" id="start-timestamp" name="start-timestamp" required><br><br>
+        
+        <label for="end-timestamp">End Timestamp:</label><br>
+        <input type="datetime-local" id="end-timestamp" name="end-timestamp" required><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
+
+    <div id="forecast-results"></div>
+
+    <script>
+        document.getElementById('forecast-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get the user input timestamps
+            var startTimestamp = document.getElementById('start-timestamp').value;
+            var endTimestamp = document.getElementById('end-timestamp').value;
+
+            // Prepare the data to send to the Flask route
+            var data = {
+                'start_timestamp': startTimestamp,
+                'end_timestamp': endTimestamp
+            };
+
+            // Send a POST request to the Flask route
+            fetch('/forecast_result', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display the forecast results
+                document.getElementById('forecast-results').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -14,19 +14,26 @@ v4model=pickle.load(open('SARIMAv4.pkl', 'rb'))
 def home():
     return render_template('home.html')
 
-@app.route('/forecast_api', methods=['POST'])
-def forecast_api():
+@app.route('/forecast_input')
+def forecast_input():
+    return render_template('forecast_input.html')
+
+@app.route('/forecast_result', methods=['POST'])
+def forecast_result():
     try:
         data = request.get_json()
         #lower and upper range for a forecasting window
-        value1 = data['value1']
-        value2 = data['value2']
+        start_timestamp = pd.to_datetime(data['start_timestamp'])
+        end_timestamp = pd.to_datetime(data['end_timestamp'])
         hours = 8766 #number of hours in a year, this will further be refined to take the dates an input
       
         #Make predictions
         forecast = v4model.forecast(steps=hours)
-        output = forecast.iloc[value1:value2].to_dict()
-
+      
+        # Filter the forecast to include only the specified date range
+        forecast_range = forecast.loc[start_timestamp:end_timestamp]
+        output = forecast_range.to_dict()
+       
         # Convert Timestamp keys to strings
         output = {str(key): value for key, value in output.items()}
 
